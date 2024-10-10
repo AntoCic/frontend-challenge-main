@@ -11,6 +11,12 @@
 <script>
 import { store } from '../store';
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true
+    },
+  },
   data() {
     return {
       store,

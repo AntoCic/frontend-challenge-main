@@ -3,13 +3,20 @@ import axios from 'axios'
 
 export const store = reactive({
     TMDB_KEY: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZmJhNWJjY2ZlZDVkMjkwOTQ5ZTRlOTI0NzI3YWIwYiIsIm5iZiI6MTcyNDc2OTU3NS45MTUxODksInN1YiI6IjY2MWUzMzFiYTZmZGFhMDE2MzZhMzA0MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9siXx7K_Jt3NXRjJPJUFUcl2eXgud3Xgc3BTspbl188',
+    currentMovies: null,
+    currentPage: null,
+    totalPages: null,
 
     async start() {
         // Ho riatardato la chiamata cosi si può vedere il loader.
         this.loading.on()
         setTimeout(async () => {
-            console.log(await this.callAPI());
-        }, 2000);
+            const resApi = await this.callAPI()
+            console.log(resApi);
+            this.currentMovies = resApi.results
+            this.currentPage = resApi.page
+            this.totalPages = resApi.total_pages
+        }, 500);
 
 
     },
@@ -69,9 +76,10 @@ export const store = reactive({
 class Movie {
     constructor(movie) {
         this.id = movie.id
-        this.adult = movie.title
-        this.img = movie.backdrop_path
-        this.poster = movie.poster_path
+        this.title = movie.title
+        this.adult = movie.adult
+        this.img = `https://image.tmdb.org/t/p/w342${movie.backdrop_path}`
+        this.poster = `https://image.tmdb.org/t/p/w342${movie.poster_path}`
         this.plot = movie.overview
         this.popularity = movie.popularity
         this.release_date = movie.first_air_date
