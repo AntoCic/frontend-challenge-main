@@ -5,8 +5,11 @@ import countries from './countries'
 export const store = reactive({
     TMDB_KEY: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZmJhNWJjY2ZlZDVkMjkwOTQ5ZTRlOTI0NzI3YWIwYiIsIm5iZiI6MTcyNDc2OTU3NS45MTUxODksInN1YiI6IjY2MWUzMzFiYTZmZGFhMDE2MzZhMzA0MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9siXx7K_Jt3NXRjJPJUFUcl2eXgud3Xgc3BTspbl188',
     currentMovies: null,
-    currentPage: null,
+    currentPage: 1,
     totalPages: null,
+
+
+    homeTitle: 'Best Movie',
 
     genres: [
         {
@@ -98,41 +101,91 @@ export const store = reactive({
         // Ho riatardato la chiamata cosi si può vedere il loader.
         this.loading.on()
         setTimeout(async () => {
-            const resApi = await this.callAPI()
-            console.log(resApi);
-            this.currentMovies = resApi.results
-            this.currentPage = resApi.page
-            this.totalPages = resApi.total_pages
+            await this.callAPI()
         }, 500);
 
 
     },
 
-    async callAPI(action = 'discover/movie', params = { language: 'it_IT', sort_by: 'popularity.desc' }, query = '') {
-        this.loading.on()
-        return await axios.get(`https://api.themoviedb.org/3/${action}`, {
-            params,
-            headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer ' + this.TMDB_KEY
-            }
-        })
-            .then((res) => {
-                if (res.data.results && res.data.results.length > 0) {
-                    const parsedData = []
-                    res.data.results.forEach(movie => {
-                        parsedData.push(new Movie(movie))
-                    });
-                    res.data.results = parsedData
-                }
-                this.loading.off()
-                return res.data
-            })
-            .catch((err) => {
-                this.loading.off()
-                return err
-            });
+    async callAPI(action = 'discover/movie', params = { language: 'it_IT', sort_by: 'popularity.desc' }, advancedSearch = null) {
+        console.log('ricerca', advancedSearch);
 
+        this.loading.on()
+        if (advancedSearch) {
+            this.currentMovies = []
+            while (this.currentMovies.length <= 20 && this.currentPage !== this.totalPages) {
+                if (params.page) {
+                    params.page++
+                } else {
+                    params.page = 1
+                }
+                await axios.get(`https://api.themoviedb.org/3/${action}`, {
+                    params,
+                    headers: {
+                        accept: 'application/json',
+                        Authorization: 'Bearer ' + this.TMDB_KEY
+                    }
+                })
+                    .then((res) => {
+                        if (res.data.results && res.data.results.length > 0) {
+                            res.data.results.forEach(movie => {
+                                const checkGenre = advancedSearch.genre ? movie.genre_ids.includes(advancedSearch.genre) : true;
+                                const checkLanguage = advancedSearch.language ? movie.original_language === advancedSearch.language : true;
+                                if (movie.backdrop_path && movie.poster_path && checkGenre && checkLanguage) {
+                                    this.currentMovies.push(new Movie(movie))
+                                }
+                            });
+                        }
+                        this.currentPage = res.data.page
+                        this.totalPages = res.data.total_pages
+
+                        console.log(res.data);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+            console.log(this.currentMovies.length <= 20 && this.currentPage !== this.totalPages, this.currentMovies, this.currentPage, this.totalPages);
+            if (this.currentPage === this.totalPages) {
+                this.currentPage = 1
+                this.totalPages = null
+            }
+            this.loading.off()
+            return this.currentMovies
+
+        } else {
+            return await axios.get(`https://api.themoviedb.org/3/${action}`, {
+                params,
+                headers: {
+                    accept: 'application/json',
+                    Authorization: 'Bearer ' + this.TMDB_KEY
+                }
+            })
+                .then((res) => {
+                    if (res.data.results && res.data.results.length > 0) {
+                        const parsedData = []
+                        res.data.results.forEach(movie => {
+                            if (movie.backdrop_path && movie.poster_path) {
+                                parsedData.push(new Movie(movie))
+                            }
+                        });
+                        res.data.results = parsedData
+                    }
+                    this.currentMovies = res.data.results
+                    this.currentPage = res.data.page
+                    this.totalPages = res.data.total_pages
+
+                    this.loading.off()
+
+                    // console.log(res.data);
+
+                    return res.data
+                })
+                .catch((err) => {
+                    this.loading.off()
+                    return err
+                });
+        }
     },
 
 
@@ -167,7 +220,7 @@ class Movie {
         this.id = movie.id.toString()
         this.title = movie.title
         this.adult = movie.adult
-        this.img = `https://image.tmdb.org/t/p/w342${movie.backdrop_path}`
+        this.img = `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`
         this.poster = `https://image.tmdb.org/t/p/w342${movie.poster_path}`
         this.plot = movie.overview
         this.popularity = movie.popularity

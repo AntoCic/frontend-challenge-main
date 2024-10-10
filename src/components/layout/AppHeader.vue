@@ -7,9 +7,11 @@
             <img src="/img/logo.png" class="logo align-text-top rounded" alt="Vue logo" />
           </RouterLink>
         </div>
+        <!-- Searchbar -->
         <div class="col-auto">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="cerca film" v-model="query">
+            <input type="text" class="form-control" placeholder="cerca film" v-model.lazy.trim="query"
+              @keyup.enter="search()">
             <button class="btn btn-outline-light" type="button" @click="search()">
               <span class="material-symbols-outlined">
                 search
@@ -18,12 +20,12 @@
           </div>
         </div>
         <div class="col-12">
-          <p type="button" class="mb-0 small text-end" @click="isOpenAdvancedSearch = !isOpenAdvancedSearch">ricerca
+          <p type="button" class="mb-0 small text-end" @click="toogleAdvancedSearch()">ricerca
             avanzata &#11206;</p>
         </div>
 
+        <!-- AdvancedSearch -->
         <template v-if="isOpenAdvancedSearch">
-
           <div class="col"></div>
           <div class="col-auto pe-0">
             <select class="form-select form-select-sm" v-model="genre">
@@ -34,8 +36,8 @@
           </div>
           <div class="col-auto">
             <select class="form-select form-select-sm" v-model="language">
-              <option selected :value="null">Lingua</option>
-              <option v-for="(countrie, key) in store.countries" :key="key" :value="countrie.languages" class="f-emoji">
+              <option selected :value="null">Lingua Originale</option>
+              <option v-for="(countrie, key) in store.countries" :key="key" :value="key" class="f-emoji">
                 {{ countrie.emoji }}</option>
             </select>
           </div>
@@ -52,20 +54,68 @@ export default {
     return {
       store,
 
-      query: '',
-      genre: null,
+      query: 'Ritorno',
+      genre: 27,
       language: null,
 
       isOpenAdvancedSearch: false,
+      easySearch: '',
     }
   },
-  computed: {
+  watch: {
+    query(newQuery, oldQuery) {
+      if (newQuery !== oldQuery) {
+        this.search();
+        this.easySearch = this.query + this.genre + this.language
+      }
+    }
   },
   methods: {
     search() {
-      this.resetSearc();
+      if (this.query !== '') {
+        const newEasySearch = this.query + this.genre + this.language
+        if (this.easySearch !== newEasySearch) {
+          this.easySearch = newEasySearch
+
+          this.store.homeTitle = `"${this.query}"`
+
+          const params = {
+            query: this.query,
+          }
+
+          if (this.isOpenAdvancedSearch && (this.genre !== null || this.language)) {
+            const advancedSearch = {}
+            if (this.genre !== null) {
+              advancedSearch.genre = this.genre
+            }
+
+            if (this.language) {
+              advancedSearch.language = this.language
+            }
+
+            this.store.callAPI('search/movie', params, advancedSearch)
+          } else {
+            this.store.callAPI('search/movie', params)
+          }
+
+        }
+
+      } else {
+        this.resetSearc()
+      }
+      this.$router.push({ name: 'home' });
+    },
+
+    toogleAdvancedSearch() {
+      this.isOpenAdvancedSearch = !this.isOpenAdvancedSearch
+      if (!this.isOpenAdvancedSearch) {
+        this.genre = null;
+        this.language = null;
+      }
     },
     resetSearc() {
+      this.store.callAPI()
+      this.store.homeTitle = `Best Movie`
       this.query = '';
       this.genre = null;
       this.language = null;
