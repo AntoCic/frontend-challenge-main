@@ -1,3 +1,10 @@
+// ____ ____ ____ ____ ____ ____ ____ 
+// ||A |||n |||t |||o |||C |||i |||c ||
+// ||__|||__|||__|||__|||__|||__|||__||
+// |/__\|/__\|/__\|/__\|/__\|/__\|/__\|
+
+// %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%
+
 // const {API_KEY} = process.env;
 
 // funzione netlify per gestire le chiamate
@@ -18,8 +25,23 @@ exports.handler = async function (event, context) {
 
   return router.sendRes()
 };
+// %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%
+// %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%
 
 
+
+// %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%
+//  ____  _____ _____ _   _   _ _   _____                      |
+// |  _ \| ____|  ___/ \ | | | | | |_   _|                     |             
+// | | | |  _| | |_ / _ \| | | | |   | |                       |
+// | |_| | |___|  _/ ___ \ |_| | |___| |                       |
+// |____/|_____|_|/_/   \_\___/|_____|_|_____ ____             |
+// | | | |_   _|_ _| |   |_ _|_   _|_ _| ____/ ___|            |
+// | | | | | |  | || |    | |  | |  | ||  _| \___ \            |
+// | |_| | | |  | || |___ | |  | |  | || |___ ___) |           |
+//  \___/  |_| |___|_____|___| |_| |___|_____|____/            |
+//                                                             |
+// %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%
 
 // Oggetto che ho creato per gestire e semplificare le chiamate al server
 const router = {
@@ -37,9 +59,9 @@ const router = {
   // per fornire un riferimento per trasformare in caso di un secondo set la risposta in un array
   isSecondSet: false,
 
-  // contiene tutti i path parems 
+  // contiene tutti i path parems
   pathParams: [],
-  // contiene tutti i body parems 
+  // contiene tutti i body parems
   bodyParams: null,
 
   // conta le chiamata ricevute per debugging
@@ -75,8 +97,8 @@ const router = {
     if (this.event && !this.stateError) {
       return true
     } else {
-      console.error('ERROR 500: non hai inizializzato il router, SCRIVI: router.start(event);');
-      this.error(500, 'ERROR 500: non hai inizializzato il router, SCRIVI: router.start(event);')
+      console.error('|I| ERROR 500: non hai inizializzato il router, SCRIVI: router.start(event);');
+      this.error(500, '|I| ERROR 500: non hai inizializzato il router, SCRIVI: router.start(event);')
       return false
     }
   },
@@ -144,7 +166,7 @@ const router = {
     }
   },
 
-  // metodo per ottenere i parametri 
+  // metodo per ottenere i parametri
   // di defaul viene utilizzata per ottenere il primo parametro che viene indicato nelle richeste
   params(index = 0) {
     if (this.pathParams.length >= index + 1) {
@@ -194,6 +216,7 @@ const router = {
   async DELETE(pathParam, ArrowFunction) {
     return await this.checkCall(pathParam, ArrowFunction, "DELETE")
   },
-
-
 }
+
+// %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%
+// %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%

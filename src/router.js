@@ -1,12 +1,12 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
 import HomeView from './pages/HomeView.vue'
-import ContactView from './pages/ContactView.vue'
+import MovieView from './pages/MovieView.vue'
 
 export default createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: HomeView },
-    { path: '/contact', component: ContactView },
+    { path: '/', name: 'home', component: HomeView },
+    { path: '/movie/:id', name: 'movie', component: MovieView, props: true },
   ],
 })

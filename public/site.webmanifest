@@ -1,6 +1,6 @@
 {
-    "short_name": "TEMP",
-    "name": "Template",
+    "short_name": "MovieTest",
+    "name": "MovieTest",
     "icons": [
         {
             "src": "/img/logo.png",

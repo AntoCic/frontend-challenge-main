@@ -8,11 +8,6 @@
           </RouterLink>
         </div>
         <div class="col-auto">
-          <!-- <button class="btn btn-outline-light border-0 px-1 me-1">
-            <span class="material-symbols-outlined">
-              person
-            </span>
-          </button> -->
         </div>
       </nav>
     </div>
@@ -25,12 +20,11 @@
 
 <style lang="scss" scoped>
 .logo {
-  height: 6em;
-  will-change: filter;
+  width: 5em;
   transition: filter 300ms;
 }
 
 .logo:hover {
-  filter: drop-shadow(0 0 2em #41B883);
+  filter: drop-shadow(0 0 2em #ffffff);
 }
 </style>

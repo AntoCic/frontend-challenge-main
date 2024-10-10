@@ -1,8 +1,14 @@
 <template>
     <div class="loader text-white">
-        <div class="spinner-box my-5 mx-auto">
-            <div class="spinner"></div>
-            <span class="smile"></span>
+        <div class="spinner">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
         <p class="text-center">{{ store.loading.msg }}</p>
     </div>
@@ -41,115 +47,80 @@ export default {
     background-color: #0000009f;
 }
 
-.spinner-box {
-    max-width: 200px;
-    max-height: 200px;
-    width: 50vw;
-    height: 50vw;
+
+.spinner {
     position: relative;
-
-    .spinner {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-        width: 70%;
-        height: 70%;
-        border-radius: 50%;
-        box-shadow: -50px 0px 50px #c8f859, -50px -50px 50px #6359f8, 0px -50px 50px 0px #9c32e2, 50px -50px 50px #f36896, 50px 0 50px #ff0b0b, 50px 50px 50px 0px #ff5500, 0 50px 50px 0px #ff9500, -50px 50px 50px 0px #ffb700;
-        animation: rotation360 1.5s linear infinite;
-    }
-}
-
-@keyframes rotation360 {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.smile {
-    width: 100%;
-    height: 100%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
-    background-color: #1f1f1f;
+    margin-left: -75px;
+}
+
+.spinner span {
     position: absolute;
     top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    left: var(--left);
+    width: 35px;
+    height: 7px;
+    background: #ffff;
+    animation: dominos 1s ease infinite;
+    box-shadow: 2px 2px 3px 0px black;
 }
 
-.smile::after,
-.smile::before {
-    content: "";
-    display: inline-block;
-    width: 35%;
-    height: 35%;
-    background-color: #fff;
-    background-image: radial-gradient(circle 20px, #0d161b 100%, transparent 0);
-    background-repeat: no-repeat;
-    border-radius: 50%;
-    animation: eyeMove 10s infinite, blink 10s infinite;
+.spinner span:nth-child(1) {
+    --left: 80px;
+    animation-delay: 0.125s;
 }
 
-@keyframes eyeMove {
-
-    0%,
-    10% {
-        background-position: 0px 0px;
-    }
-
-    13%,
-    40% {
-        background-position: -15px 0px;
-    }
-
-    43%,
-    70% {
-        background-position: 15px 0px;
-    }
-
-    73%,
-    90% {
-        background-position: 0px 15px;
-    }
-
-    93%,
-    100% {
-        background-position: 0px 0px;
-    }
+.spinner span:nth-child(2) {
+    --left: 70px;
+    animation-delay: 0.3s;
 }
 
-@keyframes blink {
+.spinner span:nth-child(3) {
+    left: 60px;
+    animation-delay: 0.425s;
+}
 
-    0%,
-    10%,
-    12%,
-    20%,
-    22%,
-    40%,
-    42%,
-    60%,
-    62%,
-    70%,
-    72%,
-    90%,
-    92%,
-    98%,
-    100% {
-        height: 35%;
+.spinner span:nth-child(4) {
+    animation-delay: 0.54s;
+    left: 50px;
+}
+
+.spinner span:nth-child(5) {
+    animation-delay: 0.665s;
+    left: 40px;
+}
+
+.spinner span:nth-child(6) {
+    animation-delay: 0.79s;
+    left: 30px;
+}
+
+.spinner span:nth-child(7) {
+    animation-delay: 0.915s;
+    left: 20px;
+}
+
+.spinner span:nth-child(8) {
+    left: 10px;
+}
+
+@keyframes dominos {
+    50% {
+        opacity: 0.7;
     }
 
-    11%,
-    21%,
-    41%,
-    61%,
-    71%,
-    91%,
-    99% {
-        height: 10%;
+    75% {
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+
+    80% {
+        opacity: 1;
     }
 }
 </style>
