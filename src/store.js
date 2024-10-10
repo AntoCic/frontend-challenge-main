@@ -75,7 +75,7 @@ export const store = reactive({
         },
         {
             "id": 10770,
-            "name": "televisione film"
+            "name": "TV"
         },
         {
             "id": 53,
@@ -91,6 +91,8 @@ export const store = reactive({
         }
 
     ],
+
+    countries,
 
     async start() {
         // Ho riatardato la chiamata cosi si può vedere il loader.
