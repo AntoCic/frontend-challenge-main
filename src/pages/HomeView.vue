@@ -4,10 +4,13 @@
       <div class="col-12">
         <h1>Best Movie</h1>
       </div>
+      <RouterLink :to="{ name: 'movie', params: { id: movie.id } }" class="col-10 col-sm-6 col-md-4 col-lg-3 p-1"
+        v-for="movie in store.currentMovies">
+        <div>
+          <CmpMovieCard :movie="movie" />
+        </div>
+      </RouterLink>
 
-      <div class="col-10 col-sm-6 col-md-4 col-lg-3 p-1" v-for="movie in store.currentMovies">
-        <CmpMovieCard :movie="movie" />
-      </div>
     </div>
   </div>
 </template>
