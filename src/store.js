@@ -108,8 +108,6 @@ export const store = reactive({
     },
 
     async callAPI(action = 'discover/movie', params = { language: 'it_IT', sort_by: 'popularity.desc' }, advancedSearch = null) {
-        console.log('ricerca', advancedSearch);
-
         this.loading.on()
         if (advancedSearch) {
             this.currentMovies = []
@@ -138,19 +136,17 @@ export const store = reactive({
                         }
                         this.currentPage = res.data.page
                         this.totalPages = res.data.total_pages
-
-                        console.log(res.data);
                     })
                     .catch((err) => {
                         console.log(err);
                     });
             }
-            console.log(this.currentMovies.length <= 20 && this.currentPage !== this.totalPages, this.currentMovies, this.currentPage, this.totalPages);
             if (this.currentPage === this.totalPages) {
                 this.currentPage = 1
                 this.totalPages = null
             }
             this.loading.off()
+            // console.log(this.currentMovies);
             return this.currentMovies
 
         } else {
