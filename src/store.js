@@ -231,7 +231,7 @@ class Movie {
         this.popularity = movie.popularity
         this.release_date = new Date(movie.release_date)
         this.vote = movie.vote_average ? parseFloat(movie.vote_average).toFixed(1) : movie.vote ?? 0
-        this.ratingColor = this.vote <= 7.5 ? this.vote <= 4.9 ? 'red' : 'yellow' : 'green'
+        this.ratingColor = this.vote <= 7.5 ? this.vote <= 4.9 ? '#ff0000' : '#ffff00' : '#008000'
         this.genre_ids = movie.genre_ids
         this.original_language = movie.original_language ? typeof (movie.original_language) === 'object' ? movie.original_language : countries[movie.original_language] : null
 

@@ -11,7 +11,7 @@
         <p v-if="movie.release_date">Data di rilascio: {{ movie.release_date.toLocaleDateString() }}</p>
       </div>
       <div class="col-auto">
-        <p class="mb-0" :style="`color: ${movie.ratingColor};`">{{ movie.vote }}</p>
+        <CmpVote :id="movie.id" :vote="Number(movie.vote)" :color="movie.ratingColor" />
       </div>
       <div class="col-auto">
         <p v-if="movie.original_language" class="mb-0 f-emoji">{{ movie.original_language.emoji }}</p>
@@ -27,8 +27,9 @@
 <script>
 import { store } from '../store';
 import BtnFavorite from '../components/BtnFavorite.vue';
+import CmpVote from '../components/CmpVote.vue';
 export default {
-  components: { BtnFavorite },
+  components: { BtnFavorite, CmpVote },
   props: {
     id: {
       type: String,
