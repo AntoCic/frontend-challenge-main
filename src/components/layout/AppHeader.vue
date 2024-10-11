@@ -20,8 +20,10 @@
           </div>
         </div>
         <div class="col-12">
-          <p type="button" class="mb-0 small text-end" @click="toogleAdvancedSearch()">ricerca
-            avanzata &#11206;</p>
+          <p type="button" class="mb-0 small text-end">
+            <span @click="toogleAdvancedSearch()">ricerca avanzata {{ isOpenAdvancedSearch ? '&blacktriangle;' :
+              '&blacktriangledown;' }}</span>
+          </p>
         </div>
 
         <!-- AdvancedSearch -->
@@ -54,8 +56,8 @@ export default {
     return {
       store,
 
-      query: 'Ritorno',
-      genre: 27,
+      query: '',
+      genre: null,
       language: null,
 
       isOpenAdvancedSearch: false,

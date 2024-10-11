@@ -102,7 +102,7 @@ export const store = reactive({
         this.loading.on()
         setTimeout(async () => {
             await this.callAPI()
-        }, 500);
+        }, 2000);
 
 
     },
