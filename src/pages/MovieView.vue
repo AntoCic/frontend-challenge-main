@@ -3,7 +3,7 @@
     <div class="row align-items-center">
       <div class="col-12 position-relative">
         <img :src="movie.img" class="w-100" alt="">
-        <BtnFavorite :isFavorite="favorite" class="me-3" />
+        <BtnFavorite :movie="movie" class="me-3" />
       </div>
       <div class="col">
         <h1>{{ movie.title }}</h1>
@@ -38,7 +38,6 @@ export default {
   data() {
     return {
       store,
-      favorite: false
     }
   },
   computed: {

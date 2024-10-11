@@ -21,7 +21,8 @@
         </div>
         <div class="col-12">
           <p type="button" class="mb-0 small text-end">
-            <span @click="toogleAdvancedSearch()">ricerca avanzata {{ isOpenAdvancedSearch ? '&blacktriangle;' :
+            <span @click="showFavoriteList()" class="me-2">Lista preferiti </span>
+            <span @click="toogleAdvancedSearch()">Ricerca avanzata {{ isOpenAdvancedSearch ? '&blacktriangle;' :
               '&blacktriangledown;' }}</span>
           </p>
         </div>
@@ -126,7 +127,22 @@ export default {
       this.query = '';
       this.genre = null;
       this.language = null;
-    }
+    },
+
+    showFavoriteList() {
+      this.store.homeTitle = `Preferiti`
+      this.query = '';
+      this.genre = null;
+      this.language = null;
+
+      this.store.currentMovies = Object.values(this.store.favoritesFilm)
+      this.store.currentMovies = this.store.currentMovies.map(e => this.store.newMovieFromMovie(e))
+
+      if (this.$route.name !== 'home') {
+        this.$router.push({ name: 'home' });
+      }
+
+    },
   },
 }
 </script>

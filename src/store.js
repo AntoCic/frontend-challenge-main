@@ -8,6 +8,8 @@ export const store = reactive({
     currentPage: 1,
     totalPages: null,
 
+    favoritesFilm: null,
+
 
     homeTitle: 'Best Movie',
 
@@ -98,13 +100,16 @@ export const store = reactive({
     countries,
 
     async start() {
+        // Controlla i film preferiti nel localStorage
+        this.favoritesFilm = JSON.parse(localStorage.getItem('favorites')) || {};
+        console.log(this.favoritesFilm);
+
+
         // Ho riatardato la chiamata cosi si può vedere il loader.
         this.loading.on()
         setTimeout(async () => {
             await this.callAPI()
         }, 2000);
-
-
     },
 
     async callAPI(action = 'discover/movie', params = { language: 'it_IT', sort_by: 'popularity.desc' }, advancedSearch = null) {
@@ -184,7 +189,9 @@ export const store = reactive({
         }
     },
 
-
+    newMovieFromMovie(movie) {
+        return new Movie(movie);
+    },
 
     loading: {
         state: false,
@@ -208,7 +215,9 @@ export const store = reactive({
             this.state = true
         },
         off() { this.state = false },
-    }
+    },
+
+
 })
 
 class Movie {
@@ -216,15 +225,16 @@ class Movie {
         this.id = movie.id.toString()
         this.title = movie.title
         this.adult = movie.adult
-        this.img = `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`
-        this.poster = `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-        this.plot = movie.overview
+        this.img = movie.backdrop_path ? `https://image.tmdb.org/t/p/w780${movie.backdrop_path}` : movie.img
+        this.poster = movie.poster_path ? `https://image.tmdb.org/t/p/w342${movie.poster_path}` : movie.poster
+        this.plot = movie.overview ?? movie.plot
         this.popularity = movie.popularity
         this.release_date = new Date(movie.release_date)
-        this.vote = movie.vote_average ? parseFloat(movie.vote_average).toFixed(1) : 0
+        this.vote = movie.vote_average ? parseFloat(movie.vote_average).toFixed(1) : movie.vote ?? 0
         this.ratingColor = this.vote <= 7.5 ? this.vote <= 4.9 ? 'red' : 'yellow' : 'green'
         this.genre_ids = movie.genre_ids
-        this.original_language = countries[movie.original_language]
+        this.original_language = movie.original_language ? typeof (movie.original_language) === 'object' ? movie.original_language : countries[movie.original_language] : null
+
     }
 
     genre() {

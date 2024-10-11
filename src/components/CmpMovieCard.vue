@@ -2,7 +2,7 @@
     <div class="movie_card">
         <img :src="movie.poster" alt="">
         <p :style="`color: ${movie.ratingColor};`">{{ movie.vote }}</p>
-        <BtnFavorite :isFavorite="favorite" />
+        <BtnFavorite :movie="movie" />
     </div>
 </template>
 
@@ -16,11 +16,6 @@ export default {
             required: true
         },
     },
-    data() {
-        return {
-            favorite: false
-        }
-    }
 }
 </script>
 
