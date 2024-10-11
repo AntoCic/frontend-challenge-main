@@ -40,7 +40,7 @@ export default {
 <style lang="scss" scoped>
 .main-container {
     width: 100%;
-    height: 100px;
+    height: 120px;
     position: relative;
 }
 

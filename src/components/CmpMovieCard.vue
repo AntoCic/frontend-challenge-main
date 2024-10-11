@@ -1,6 +1,6 @@
 <template>
-    <div class="movie_card">
-        <img :src="movie.poster" alt="">
+    <div class="movie_card rounded">
+        <img :src="movie.poster" class="rounded" alt="">
         <CmpVote :id="movie.id" :vote="Number(movie.vote)" :color="movie.ratingColor" class="vote" />
         <BtnFavorite :movie="movie" />
     </div>
@@ -24,6 +24,13 @@ export default {
 .movie_card {
     width: 100%;
     position: relative;
+    transition: 0.3s;
+
+    &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px #ffffff80;
+        z-index: 10;
+    }
 
     img {
         width: 100%;

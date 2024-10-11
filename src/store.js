@@ -179,10 +179,6 @@ export const store = reactive({
                     this.currentPage = res.data.page
                     this.totalPages = res.data.total_pages
 
-                    console.log(this.currentMovies);
-                    console.log(this.currentPage);
-                    console.log(this.totalPages);
-
                     this.loading.off()
                     return res.data
                 })
