@@ -11,6 +11,9 @@
         </RouterLink>
       </template>
       <p v-else class="text-center">La ricerca non ha dato risultati</p>
+      <div class="col-12" v-if="this.store.lastCall">
+        <CmpPagination />
+      </div>
     </div>
   </div>
 </template>
@@ -18,8 +21,9 @@
 <script>
 import { store } from '../store';
 import CmpMovieCard from '../components/CmpMovieCard.vue';
+import CmpPagination from '../components/CmpPagination.vue';
 export default {
-  components: { CmpMovieCard },
+  components: { CmpMovieCard, CmpPagination },
   data() {
     return {
       store,

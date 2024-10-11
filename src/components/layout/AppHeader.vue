@@ -134,6 +134,7 @@ export default {
       this.query = '';
       this.genre = null;
       this.language = null;
+      this.store.lastCall = null
 
       this.store.currentMovies = Object.values(this.store.favoritesFilm)
       this.store.currentMovies = this.store.currentMovies.map(e => this.store.newMovieFromMovie(e))

@@ -10,6 +10,7 @@ export const store = reactive({
 
     favoritesFilm: null,
 
+    lastCall: null,
 
     homeTitle: 'Best Movie',
 
@@ -102,7 +103,6 @@ export const store = reactive({
     async start() {
         // Controlla i film preferiti nel localStorage
         this.favoritesFilm = JSON.parse(localStorage.getItem('favorites')) || {};
-        console.log(this.favoritesFilm);
 
 
         // Ho riatardato la chiamata cosi si può vedere il loader.
@@ -114,9 +114,11 @@ export const store = reactive({
 
     async callAPI(action = 'discover/movie', params = { language: 'it_IT', sort_by: 'popularity.desc' }, advancedSearch = null) {
         this.loading.on()
+
         if (advancedSearch) {
+            this.lastCall = null
             this.currentMovies = []
-            while (this.currentMovies.length <= 20 && this.currentPage !== this.totalPages) {
+            while (this.currentMovies.length <= 40 && this.currentPage !== this.totalPages) {
                 if (params.page) {
                     params.page++
                 } else {
@@ -155,6 +157,7 @@ export const store = reactive({
             return this.currentMovies
 
         } else {
+            this.lastCall = { action, params }
             return await axios.get(`https://api.themoviedb.org/3/${action}`, {
                 params,
                 headers: {
@@ -176,10 +179,11 @@ export const store = reactive({
                     this.currentPage = res.data.page
                     this.totalPages = res.data.total_pages
 
+                    console.log(this.currentMovies);
+                    console.log(this.currentPage);
+                    console.log(this.totalPages);
+
                     this.loading.off()
-
-                    // console.log(res.data);
-
                     return res.data
                 })
                 .catch((err) => {
@@ -234,7 +238,6 @@ class Movie {
         this.ratingColor = this.vote <= 7.5 ? this.vote <= 4.9 ? '#ff0000' : '#ffff00' : '#008000'
         this.genre_ids = movie.genre_ids
         this.original_language = movie.original_language ? typeof (movie.original_language) === 'object' ? movie.original_language : countries[movie.original_language] : null
-
     }
 
     genre() {
