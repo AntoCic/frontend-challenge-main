@@ -4,16 +4,21 @@ import countries from './countries'
 
 export const store = reactive({
     TMDB_KEY: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZmJhNWJjY2ZlZDVkMjkwOTQ5ZTRlOTI0NzI3YWIwYiIsIm5iZiI6MTcyNDc2OTU3NS45MTUxODksInN1YiI6IjY2MWUzMzFiYTZmZGFhMDE2MzZhMzA0MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9siXx7K_Jt3NXRjJPJUFUcl2eXgud3Xgc3BTspbl188',
+    // contiene tutti i film caricati in pagina
     currentMovies: null,
     currentPage: 1,
     totalPages: null,
 
+    // corrisponde al localStorage 'favorites'
     favoritesFilm: null,
 
+    // ultima chiamata fatta per poterla ripetere in caso bisogna cambiare pagina
     lastCall: null,
 
+    // il titolo che viene visualizzato in alto
     homeTitle: 'Best Movie',
 
+    // elenco scaricato da API TMDB con tutti i generi 
     genres: [
         {
             "id": 0,
@@ -98,8 +103,10 @@ export const store = reactive({
 
     ],
 
+    // oggetto contenente tutte le emoji delle bandiere come value e come key la corrispondente dal sito TMDB
     countries,
 
+    // method che viene eseguito all'apertura della pagina
     async start() {
         // Controlla i film preferiti nel localStorage
         this.favoritesFilm = JSON.parse(localStorage.getItem('favorites')) || {};
@@ -112,18 +119,25 @@ export const store = reactive({
         }, 2000);
     },
 
+
     async callAPI(action = 'discover/movie', params = { language: 'it_IT', sort_by: 'popularity.desc' }, advancedSearch = null) {
+        // Attiva il caricamento
         this.loading.on()
 
+        // Se è stata fornita una ricerca avanzata
         if (advancedSearch) {
+            // Resetta l'ultima chiamata
             this.lastCall = null
+            // Resetta l'elenco dei film attuali
             this.currentMovies = []
             while (this.currentMovies.length <= 40 && this.currentPage !== this.totalPages) {
+                // Incrementa il parametro 'page' se esiste, altrimenti lo imposta a 1
                 if (params.page) {
                     params.page++
                 } else {
                     params.page = 1
                 }
+                // Esegue la chiamata API a The Movie Database (TMDb)
                 await axios.get(`https://api.themoviedb.org/3/${action}`, {
                     params,
                     headers: {
@@ -133,10 +147,13 @@ export const store = reactive({
                 })
                     .then((res) => {
                         if (res.data.results && res.data.results.length > 0) {
+
+                            // Filtra i film in base alla ricerca avanzata
                             res.data.results.forEach(movie => {
                                 const checkGenre = advancedSearch.genre ? movie.genre_ids.includes(advancedSearch.genre) : true;
                                 const checkLanguage = advancedSearch.language ? movie.original_language === advancedSearch.language : true;
                                 if (movie.backdrop_path && movie.poster_path && checkGenre && checkLanguage) {
+                                    // Aggiunge il film all'elenco solo se rispetta i criteri di ricerca
                                     this.currentMovies.push(new Movie(movie))
                                 }
                             });
@@ -148,16 +165,22 @@ export const store = reactive({
                         console.log(err);
                     });
             }
+            // Se si è raggiunta l'ultima pagina, resetta i contatori di pagine
             if (this.currentPage === this.totalPages) {
                 this.currentPage = 1
                 this.totalPages = null
             }
+            // Disattiva il caricamento e restituisce i film attuali
             this.loading.off()
-            // console.log(this.currentMovies);
+
             return this.currentMovies
 
-        } else {
+        }
+        else {
+            // Nessuna ricerca avanzata: salva l'ultima chiamata
             this.lastCall = { action, params }
+
+            // Esegue la chiamata API a The Movie Database (TMDb)
             return await axios.get(`https://api.themoviedb.org/3/${action}`, {
                 params,
                 headers: {

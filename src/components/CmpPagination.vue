@@ -20,6 +20,7 @@ export default {
         }
     },
     methods: {
+        // Metodo per caricare la pagina successiva
         async nextPage() {
             window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -27,6 +28,8 @@ export default {
             params.page = this.store.currentPage + 1
             await this.store.callAPI(action, params)
         },
+
+        // Metodo per caricare la pagina precedente
         async previusPage() {
             window.scrollTo({ top: 0, behavior: "smooth" });
             let { action, params } = this.store.lastCall

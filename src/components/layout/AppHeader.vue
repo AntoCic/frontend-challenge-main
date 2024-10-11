@@ -10,6 +10,7 @@
         <!-- Searchbar -->
         <div class="col-auto">
           <div class="input-group">
+            <!-- input cerca -->
             <input type="text" class="form-control" placeholder="cerca film" v-model.lazy.trim="query"
               @keyup.enter="search()">
             <button class="btn btn-outline-light" type="button" @click="search()">
@@ -21,13 +22,15 @@
         </div>
         <div class="col-12">
           <p type="button" class="mb-0 small text-end">
+            <!-- btn Lista preferiti -->
             <span @click="showFavoriteList()" class="me-2">Lista preferiti </span>
+            <!-- btn ricerca avanzata -->
             <span @click="toogleAdvancedSearch()">Ricerca avanzata {{ isOpenAdvancedSearch ? '&blacktriangle;' :
               '&blacktriangledown;' }}</span>
           </p>
         </div>
 
-        <!-- AdvancedSearch -->
+        <!-- Ricerca avanzata -->
         <template v-if="isOpenAdvancedSearch">
           <div class="col"></div>
           <div class="col-auto pe-0">
@@ -62,89 +65,116 @@ export default {
       language: null,
 
       isOpenAdvancedSearch: false,
+
+      // salva la ricerca in una stringa per evitare di ripeterla
       easySearch: '',
     }
   },
   watch: {
+    // Osserva le modifiche dell'input cerca
     query(newQuery, oldQuery) {
       if (newQuery !== oldQuery) {
-        this.search();
-        this.easySearch = this.query + this.genre + this.language
+        this.search(); // Chiama il metodo 'search' per eseguire la ricerca
+        this.easySearch = this.query + this.genre + this.language // Salva i parametri di ricerca in una stringa unica per evitare di cercare piú volte la stessa cosa
       }
     }
   },
   methods: {
-    search() {
-      if (this.query !== '') {
-        const newEasySearch = this.query + this.genre + this.language
-        if (this.easySearch !== newEasySearch) {
-          this.easySearch = newEasySearch
 
-          this.store.homeTitle = `"${this.query}"`
+    // Metodo per eseguire la ricerca
+    search() {
+
+      if (this.query !== '') {
+        const newEasySearch = this.query + this.genre + this.language; // Salva i parametri di ricerca in una stringa unica per evitare di cercare piú volte la stessa cosa
+
+        // Se la ricerca è cambiata, aggiorna 'easySearch'
+        if (this.easySearch !== newEasySearch) {
+          this.easySearch = newEasySearch;
+
+          // Imposta il titolo della home con il valore della query
+          this.store.homeTitle = `"${this.query}"`;
 
           const params = {
             query: this.query,
-          }
+          };
 
+          // Se la ricerca avanzata è aperta e sono stati selezionati genere o lingua
           if (this.isOpenAdvancedSearch && (this.genre !== null || this.language)) {
-            const advancedSearch = {}
+            const advancedSearch = {};
+
             if (this.genre !== null) {
-              advancedSearch.genre = this.genre
+              advancedSearch.genre = this.genre;
             }
 
             if (this.language) {
-              advancedSearch.language = this.language
+              advancedSearch.language = this.language;
             }
 
-            this.store.callAPI('search/movie', params, advancedSearch)
+            // Esegui la chiamata API con i parametri e la ricerca avanzata
+            this.store.callAPI('search/movie', params, advancedSearch);
           } else {
-            this.store.callAPI('search/movie', params)
+            // Esegui la chiamata API con solo il testo inserito nell'input cerca
+            this.store.callAPI('search/movie', params);
           }
-
         }
-
       } else {
-        this.resetSearc()
+        // Se la query è vuota, resetta la ricerca
+        this.resetSearc();
       }
+
+      // Aggiorna il percorso router per reindirizzare alla home
       this.$router.push({ name: 'home' });
     },
 
+    // Metodo per aprire/chiudere la ricerca avanzata
     toogleAdvancedSearch() {
-      this.isOpenAdvancedSearch = !this.isOpenAdvancedSearch
+      this.isOpenAdvancedSearch = !this.isOpenAdvancedSearch;
+
+      // Se la ricerca avanzata viene chiusa, resetta genere e lingua
       if (!this.isOpenAdvancedSearch) {
         this.genre = null;
         this.language = null;
       }
     },
+
+    // Metodo eseguito al click sul logo
     handleLogoClick() {
+      // Se siamo già sulla pagina 'home', resetta la ricerca
       if (this.$route.name === 'home') {
         this.resetSearc();
       }
     },
+
+    // Metodo per resettare la ricerca
     resetSearc() {
-      this.store.callAPI()
-      this.store.homeTitle = `Best Movie`
+      this.store.callAPI();
+      this.store.homeTitle = `Best Movie`;
       this.query = '';
       this.genre = null;
       this.language = null;
     },
 
+    // Metodo per mostrare la lista dei film preferiti
     showFavoriteList() {
-      this.store.homeTitle = `Preferiti`
+      this.store.homeTitle = `Preferiti`;
       this.query = '';
       this.genre = null;
       this.language = null;
-      this.store.lastCall = null
+      this.store.lastCall = null;
 
-      this.store.currentMovies = Object.values(this.store.favoritesFilm)
-      this.store.currentMovies = this.store.currentMovies.map(e => this.store.newMovieFromMovie(e))
+      // Recupera i film preferiti dalla store
+      this.store.currentMovies = Object.values(this.store.favoritesFilm);
 
+      // Converte i film preferiti in oggetti Movie
+      this.store.currentMovies = this.store.currentMovies.map(e => this.store.newMovieFromMovie(e));
+
+      // Se non siamo già nella home, reindirizza alla home
       if (this.$route.name !== 'home') {
         this.$router.push({ name: 'home' });
       }
-
     },
   },
+
 }
 </script>
 
