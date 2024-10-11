@@ -2,17 +2,25 @@
     <div class="movie_card">
         <img :src="movie.poster" alt="">
         <p :style="`color: ${movie.ratingColor};`">{{ movie.vote }}</p>
+        <BtnFavorite :isFavorite="favorite" />
     </div>
 </template>
 
 <script>
+import BtnFavorite from './BtnFavorite.vue';
 export default {
+    components: { BtnFavorite },
     props: {
         movie: {
             type: Object,
             required: true
         },
     },
+    data() {
+        return {
+            favorite: false
+        }
+    }
 }
 </script>
 

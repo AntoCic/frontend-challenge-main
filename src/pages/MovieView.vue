@@ -1,8 +1,9 @@
 <template>
   <div class="container" v-if="movie">
     <div class="row align-items-center">
-      <div class="col-12">
+      <div class="col-12 position-relative">
         <img :src="movie.img" class="w-100" alt="">
+        <BtnFavorite :isFavorite="favorite" class="me-3" />
       </div>
       <div class="col">
         <h1>{{ movie.title }}</h1>
@@ -17,7 +18,6 @@
       </div>
       <div class="col-12">
         <p v-if="movie.plot">{{ movie.plot }}</p>
-
       </div>
 
     </div>
@@ -26,7 +26,9 @@
 
 <script>
 import { store } from '../store';
+import BtnFavorite from '../components/BtnFavorite.vue';
 export default {
+  components: { BtnFavorite },
   props: {
     id: {
       type: String,
@@ -35,7 +37,8 @@ export default {
   },
   data() {
     return {
-      store
+      store,
+      favorite: false
     }
   },
   computed: {
