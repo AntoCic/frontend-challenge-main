@@ -28,7 +28,7 @@ export default {
 
     &:hover {
         transform: scale(1.1);
-        box-shadow: 0 0 25px hsla(0, 0%, 100%, 0.34);
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.34);
         z-index: 10;
     }
 

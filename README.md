@@ -1,5 +1,7 @@
 # MovieTest
-Questo sito è stato creato per visualizzare la descrizione dei film direttamente nella home page. Una volta avviato, troverai i film più popolari del momento. Dalla barra superiore, puoi effettuare la ricerca di un film specifico e, cliccando su "Ricerca avanzata", puoi filtrare i film per genere o lingua originale. Selezionando la card di un film, si aprirà una pagina di dettaglio dove potrai visualizzare tutte le informazioni sul film, inclusi la trama, la valutazione (da 1 a 10) e la data di uscita.
+Questo sito è progettato per offrire un'esperienza visiva nel mondo del cinema, mostrando nella home page le copertine dei film più popolari del momento. Una volta avviato, gli utenti possono facilmente esplorare una selezione curata di titoli di successo.
+Utilizzando la barra di navigazione superiore, è possibile effettuare ricerche mirate per trovare film specifici e, tramite la funzione "Ricerca avanzata", filtrare le opzioni in base a genere o lingua originale. Cliccando su una card di un film, gli utenti accedono a una pagina di dettaglio ricca di informazioni, tra cui trama, valutazione (su una scala da 1 a 10) e data di uscita.
+Inoltre, il sito offre la comoda funzionalità di salvare i film preferiti in locale, consentendo un accesso rapido e personalizzato alle scelte cinematografiche. Con questa piattaforma, gli appassionati di cinema possono scoprire e gestire facilmente i propri film preferiti in un ambiente user-friendly.
 
 ## Tecnologie Utilizzate
 
