@@ -213,6 +213,8 @@ export const store = reactive({
 
 class Movie {
     constructor(movie) {
+        console.log(movie);
+
         this.id = movie.id.toString()
         this.title = movie.title
         this.adult = movie.adult
@@ -220,10 +222,17 @@ class Movie {
         this.poster = `https://image.tmdb.org/t/p/w342${movie.poster_path}`
         this.plot = movie.overview
         this.popularity = movie.popularity
-        this.release_date = movie.first_air_date
+        this.release_date = new Date(movie.release_date)
         this.vote = movie.vote_average ? parseFloat(movie.vote_average).toFixed(1) : 0
         this.ratingColor = this.vote <= 7.5 ? this.vote <= 4.9 ? 'red' : 'yellow' : 'green'
         this.genre_ids = movie.genre_ids
         this.original_language = countries[movie.original_language]
     }
+
+    genre() {
+        return this.genre_ids
+            .map(id => store.genres.find(genre => genre.id === id).name)
+            .join(', ') + '.';
+    }
+
 }

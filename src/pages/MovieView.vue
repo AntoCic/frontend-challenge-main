@@ -6,7 +6,8 @@
       </div>
       <div class="col">
         <h1>{{ movie.title }}</h1>
-        <p v-if="movie.release_date">{{ movie.release_date }}</p>
+        <p v-if="movie.genre_ids.length > 0" class="mb-0">{{ movie.genre() }}</p>
+        <p v-if="movie.release_date">Data di rilascio: {{ movie.release_date.toLocaleDateString() }}</p>
       </div>
       <div class="col-auto">
         <p class="mb-0" :style="`color: ${movie.ratingColor};`">{{ movie.vote }}</p>
