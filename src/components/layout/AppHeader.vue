@@ -4,7 +4,7 @@
       <nav class="row align-items-center my-1">
         <div class="col">
           <RouterLink to="/">
-            <img src="/img/logo.png" class="logo align-text-top rounded" alt="Vue logo" />
+            <img src="/img/logo.png" class="logo align-text-top rounded" alt="Vue logo" @click="handleLogoClick()" />
           </RouterLink>
         </div>
         <!-- Searchbar -->
@@ -113,6 +113,11 @@ export default {
       if (!this.isOpenAdvancedSearch) {
         this.genre = null;
         this.language = null;
+      }
+    },
+    handleLogoClick() {
+      if (this.$route.name === 'home') {
+        this.resetSearc();
       }
     },
     resetSearc() {

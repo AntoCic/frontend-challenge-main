@@ -213,8 +213,6 @@ export const store = reactive({
 
 class Movie {
     constructor(movie) {
-        console.log(movie);
-
         this.id = movie.id.toString()
         this.title = movie.title
         this.adult = movie.adult
